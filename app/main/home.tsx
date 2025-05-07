@@ -105,7 +105,7 @@ function SubjectTile({ subject, expanded, onPress, onViewDetails }: any) {
                 />
               </G>
               <TextSvg
-                x="50"
+                x="43"
                 y="55"
                 fontSize={expanded ? '20' : '16'}
                 fill="#000"
@@ -133,7 +133,7 @@ function SubjectTile({ subject, expanded, onPress, onViewDetails }: any) {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#fff',
   },
   container: {
     paddingHorizontal: 16,
@@ -155,15 +155,15 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   tile: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#f9f9f9',
     borderRadius: 16,
     paddingVertical: 16,
     paddingHorizontal: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 6,       
   },
   tileExpanded: {
     paddingVertical: 24,

@@ -1,57 +1,97 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  Easing,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 const { height } = Dimensions.get('window');
+const typingText = 'Attend';
 
 export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   const yAnim = useRef(new Animated.Value(height)).current;
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-  const [showText, setShowText] = useState(false);
+  const xScaleAnim = useRef(new Animated.Value(1)).current;
+  const pulseScaleAnim = useRef(new Animated.Value(1)).current;
+  const [typedText, setTypedText] = useState('');
+  const [startTyping, setStartTyping] = useState(false);
 
   useEffect(() => {
-    // Step 1: "X" rises up
+
     Animated.timing(yAnim, {
-      toValue: height / 2 - 50,
-      duration: 800,
+      toValue: 0,
+      duration: 1000,
+      easing: Easing.out(Easing.exp),
       useNativeDriver: true,
     }).start(() => {
-      setShowText(true);
 
-      // Step 2: Pulsing animation
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(scaleAnim, {
-            toValue: 1.1,
-            duration: 400,
-            useNativeDriver: true,
-          }),
-          Animated.timing(scaleAnim, {
-            toValue: 1,
-            duration: 400,
-            useNativeDriver: true,
-          }),
-        ])
-      ).start();
-
-      // Step 3: Finish after delay
-      setTimeout(() => {
-        onFinish();
-      }, 2500);
+      Animated.sequence([
+        Animated.timing(xScaleAnim, {
+          toValue: 3, 
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(xScaleAnim, {
+          toValue: 1,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ]).start(() => {
+        setStartTyping(true);
+      });
     });
   }, []);
 
+  useEffect(() => {
+    if (!startTyping) return;
+
+    const delay = 100;
+    let i = 1;
+
+    const interval = setInterval(() => {
+      setTypedText(typingText.slice(0, i));
+      i++;
+      if (i > typingText.length) {
+        clearInterval(interval);
+
+
+        Animated.loop(
+          Animated.sequence([
+            Animated.timing(pulseScaleAnim, {
+              toValue: 1.07,
+              duration: 400,
+              useNativeDriver: true,
+            }),
+            Animated.timing(pulseScaleAnim, {
+              toValue: 1,
+              duration: 400,
+              useNativeDriver: true,
+            }),
+          ])
+        ).start();
+
+        setTimeout(onFinish, 2000);
+      }
+    }, delay);
+  }, [startTyping]);
+
+  const logoTransform = [
+    { translateY: yAnim },
+    ...(typedText.length === typingText.length
+      ? [{ scale: pulseScaleAnim }]
+      : [{ scale: xScaleAnim }]),
+  ];
+
   return (
     <View style={styles.container}>
-      {!showText ? (
-        <Animated.Text style={[styles.xText, { transform: [{ translateY: yAnim }] }]}>
-          X
-        </Animated.Text>
-      ) : (
-        <Animated.Text style={[styles.logoText, { transform: [{ scale: scaleAnim }] }]}>
-          Attend
-          <Text style={styles.pinkX}>X</Text>
-        </Animated.Text>
-      )}
+      <Animated.Text style={[styles.logoText, { transform: logoTransform }]}>
+        {typedText}
+        <Text style={styles.pinkX}>X</Text>
+      </Animated.Text>
     </View>
   );
 }
@@ -62,11 +102,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  xText: {
-    fontSize: 60,
-    color: '#FD346D',
-    fontWeight: 'bold',
   },
   logoText: {
     fontSize: 36,

@@ -27,7 +27,7 @@ const AttendanceScreen = () => {
       formatted[date] = {
         customStyles: {
           container: {
-            backgroundColor: status === 'present' ? '#8ef58e' : '#FD346D',
+            backgroundColor: status === 'present' ? '#56C1AE' : '#FD346D',
             borderRadius: 999,
           },
           text: {
@@ -46,7 +46,6 @@ const AttendanceScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.replace('/main/home')}>
-          {/*Always go to /main/home */}
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Attendance</Text>
@@ -78,7 +77,7 @@ const AttendanceScreen = () => {
         {/* Legend */}
         <View style={styles.legend}>
           <View style={styles.legendItem}>
-            <View style={[styles.dot, { backgroundColor: '#8ef58e' }]} />
+            <View style={[styles.dot, { backgroundColor: '#56C1AE' }]} />
             <Text style={styles.legendText}>Present</Text>
           </View>
           <View style={styles.legendItem}>
