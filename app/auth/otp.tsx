@@ -45,7 +45,7 @@ export default function OTP() {
 
   const handleVerify = () => {
     if (otp === '123456') {
-      router.push('/main/home');
+      router.push('/student/home');
     } else {
       triggerShake();
       Vibration.vibrate(100);

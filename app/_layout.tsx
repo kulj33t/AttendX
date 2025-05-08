@@ -1,6 +1,6 @@
 import { Slot } from 'expo-router';
 import React, { useState } from 'react';
-import SplashScreen from './others/splash';
+import SplashScreen from './loading/splash';
 
 export default function RootLayout() {
   const [loading, setLoading] = useState(true);
